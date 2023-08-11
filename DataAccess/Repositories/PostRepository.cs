@@ -15,14 +15,14 @@ namespace DataAccess.Repositories
         }
         public async Task<Post> CreatePost(Post toCreate) //Creeren van een Post
         {
-            toCreate.DateCreated = DateTime.Now; //DateCreated krigt waarde
+            toCreate.DateCreated = DateTime.Now; //DateCreated krijgt waarde
             toCreate.LastModified = DateTime.Now;//LastModified krijgt default waarde
             _ctx.Posts.Add(toCreate); // Post tooegevooegd aan Posts
             await _ctx.SaveChangesAsync();//Bewaar veranderingen
             return toCreate; // Post wordt gecreerd,teruggegeven en krijgt Id
         }
 
-        public async Task DeletePost(int postId)
+        public async Task DeletePost(int postId) //verwijderen vn de post
         {
             var post = await _ctx.Posts
                 .FirstOrDefaultAsync(p => p.Id == postId);
@@ -33,17 +33,17 @@ namespace DataAccess.Repositories
             await _ctx.SaveChangesAsync();
         }
 
-        public async Task<ICollection<Post>> GetAllPosts()
+        public async Task<ICollection<Post>> GetAllPosts() //Verkrijgen van alle posts
         {
             return await _ctx.Posts.ToListAsync();
         }
 
-        public async Task<Post> GetPostById(int postId)
+        public async Task<Post> GetPostById(int postId) //Verkijgen post dmv Id
         {
             return await _ctx.Posts.FirstOrDefaultAsync(p => p.Id == postId);
         }
 
-        public async Task<Post> UpdatePost(string updateContent, int postId)
+        public async Task<Post> UpdatePost(string updateContent, int postId) //Updaten van post
         {
             var post = await _ctx.Posts.FirstOrDefaultAsync(p => p.Id == postId);
             post.LastModified = DateTime.Now;
