@@ -1,38 +1,55 @@
 ﻿using Appliction.Abstractions;
 using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace DataAccess.Repositories
 {
     public class PostRepository : IPostRepository
     {
-        public Task<Post> CreatePost(Post toCreate)
+        private readonly SocialDbContext _ctx;
+
+        public PostRepository(SocialDbContext ctx)
         {
-            throw new NotImplementedException();
+            _ctx = ctx;
+        }
+        public async Task<Post> CreatePost(Post toCreate) //Creeren van een Post
+        {
+            toCreate.DateCreated = DateTime.Now; //DateCreated krigt waarde
+            toCreate.LastModified = DateTime.Now;//LastModified krijgt default waarde
+            _ctx.Posts.Add(toCreate); // Post tooegevooegd aan Posts
+            await _ctx.SaveChangesAsync();//Bewaar veranderingen
+            return toCreate; // Post wordt gecreerd,teruggegeven en krijgt Id
         }
 
-        public Task<Post> DeletePost(int postId)
+        public async Task DeletePost(int postId)
         {
-            throw new NotImplementedException();
+            var post = await _ctx.Posts
+                .FirstOrDefaultAsync(p => p.Id == postId);
+            if (post == null) return;
+
+            _ctx.Posts.Remove(post);
+
+            await _ctx.SaveChangesAsync();
         }
 
-        public Task<ICollection<Post>> GetllPosts()
+        public async Task<ICollection<Post>> GetAllPosts()
         {
-            throw new NotImplementedException();
+            return await _ctx.Posts.ToListAsync();
         }
 
-        public Task<Post> GetPostById(int postId)
+        public async Task<Post> GetPostById(int postId)
         {
-            throw new NotImplementedException();
+            return await _ctx.Posts.FirstOrDefaultAsync(p => p.Id == postId);
         }
 
-        public Task<Post> UpdatePost(string updateContent, int postId)
+        public async Task<Post> UpdatePost(string updateContent, int postId)
         {
-            throw new NotImplementedException();
+            var post = await _ctx.Posts.FirstOrDefaultAsync(p => p.Id == postId);
+            post.LastModified = DateTime.Now;
+            post.Content = updateContent;
+            await _ctx.SaveChangesAsync();
+            return post;
         }
     }
 }

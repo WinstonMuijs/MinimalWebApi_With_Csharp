@@ -10,7 +10,7 @@ namespace Appliction.Abstractions
     public interface IPostRepository
     {
 
-        Task<ICollection<Post>> GetllPosts();
+        Task<ICollection<Post>> GetAllPosts();
      
         Task<Post> GetPostById(int postId);
 
@@ -18,6 +18,6 @@ namespace Appliction.Abstractions
 
         Task<Post> UpdatePost(string updateContent, int postId);
 
-        Task<Post> DeletePost(int postId);
+        Task DeletePost(int postId);
     }
 }
