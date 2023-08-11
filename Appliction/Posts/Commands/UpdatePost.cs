@@ -4,8 +4,9 @@ using MediatR;
 
 namespace Appliction.Posts.Commands
 {
-    public class CreatePost : IRequest<Post>
+    public class UpdatePost : IRequest<Post>
     {
+        public int Postid { get; set; }
         public string? PostContent { get; set; }
     }
 }
